@@ -1,5 +1,5 @@
-from flask import Flask, request,
-jsonify
+from flask import Flask, request, jsonify
+from datetime import datetime
 
 app = Flask(_name_)
 
@@ -27,11 +27,8 @@ def get_signal():
         "color": color,
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
+
     return jsonify(response)
 
-@app.route('/')
-def home():
-    return "Halal Smart Stock App is running!"
-
 if _name_ == '_main_':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
