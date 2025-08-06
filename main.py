@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+rom flask import Flask, request, jsonify
 from datetime import datetime
 
 app = Flask(_name_)
@@ -31,4 +31,3 @@ def get_signal():
 
 if _name_ == '_main_':
     app.run(host='0.0.0.0', port=5000)
-    
