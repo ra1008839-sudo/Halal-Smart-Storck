@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(_name_)
 
 # Simple GPT Power logic (placeholder)
 def gpt_power_signal(volume):
@@ -33,6 +33,5 @@ def get_signal():
 def home():
     return "Halal Smart Stock App is running!"
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     app.run(debug=True)
-# commit test
