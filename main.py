@@ -3,7 +3,6 @@ from datetime import datetime
 
 app = Flask(_name_)
 
-# Simple GPT Power logic (placeholder)
 def gpt_power_signal(volume):
     if volume > 900000:
         return "BUY", "green"
@@ -32,3 +31,4 @@ def get_signal():
 
 if _name_ == '_main_':
     app.run(host='0.0.0.0', port=5000)
+    
