@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 def gpt_power_signal(volume):
     if volume > 900000:
@@ -29,5 +29,5 @@ def get_signal():
 
     return jsonify(response)
 
-if _name_ == '_main_':
+if __name__== '__main__':
     app.run(host='0.0.0.0', port=5000)
