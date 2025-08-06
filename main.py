@@ -10,7 +10,7 @@ def gpt_power_signal(volume):
         return "WAIT", "orange"
     else:
         return "AVOID", "red"
-
+        
 @app.route('/get-signal', methods=['POST'])
 def get_signal():
     data = request.get_json()
