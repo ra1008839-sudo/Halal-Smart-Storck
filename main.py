@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
 
-app = Flask(_name_)
+app = Flask(__name__)
 
-# GPT Power Logic
+# Simple GPT Power logic (placeholder)
 def gpt_power_signal(volume):
     if volume > 900000:
         return "BUY", "green"
@@ -29,5 +29,5 @@ def get_signal():
     }
     return jsonify(response)
 
-if _name_ == "_main_":
-    app.run(host="0.0.0.0", port=10000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
