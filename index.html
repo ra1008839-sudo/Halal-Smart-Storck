@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>📈 Halal Smart Stock App</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #0e1117;
+      color: white;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 { color: #00ff99; }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📈 Halal Smart Stock App</h1>
+  <p>✅ Welcome! This is the frontend UI</p>
+  <button onclick="getSignal()">Get Signal</button>
+  <div id="result"></div>
+
+  <script>
+    async function getSignal() {
+      const res = await fetch("/get-signal");
+      const data = await res.json();
+      document.getElementById("result").innerHTML = `
+        <p>🕒 Date: ${data.date}</p>
+        <p>🔔 Signal: <b>${data.signal}</b></p>
+        <p>📊 Volume: ${data.volume}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
+  
