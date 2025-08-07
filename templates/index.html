@@ -1,7 +1,51 @@
-<!doctype html><html><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Halal Smart Stock</title>
-</head><body style="margin:0;font-family:system-ui;background:#0b1320;color:#fff">
-<h1 style="margin:16px">Halal Smart Stock ✅</h1>
-<p style="margin:16px">Server running. If you see this, Render is OK.</p>
-</body></html>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Halal Smart Stock</title>
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#0c0f14; color:#e8eaed; }
+    header { padding:14px 16px; background:#111827; font-weight:700; }
+    .box { padding:16px; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0; }
+    input { flex:1; min-width:120px; padding:10px; border-radius:8px; border:1px solid #334155; background:#111827; color:#e8eaed; }
+    button { padding:10px 14px; border:0; border-radius:8px; background:#2563eb; color:#fff; font-weight:700; }
+    pre { background:#0b1220; border:1px solid #1f2937; color:#d1d5db; padding:12px; border-radius:8px; min-height:90px; white-space:pre-wrap; }
+    small { opacity:0.7; }
+  </style>
+</head>
+<body>
+  <header>Halal Smart Stock</header>
+  <div class="box">
+    <small>Enter any stock name & volume, then tap <b>Get Signal</b>.</small>
+    <div class="row">
+      <input id="stock" placeholder="Stock e.g. TEST">
+      <input id="vol" type="number" placeholder="Volume e.g. 750000">
+      <button id="btn">Get Signal</button>
+    </div>
+    <pre id="out">Ready.</pre>
+  </div>
+
+  <script>
+    async function getSignal() {
+      const stock = document.getElementById("stock").value || "TEST";
+      const vol = parseInt(document.getElementById("vol").value || "0", 10);
+      const out = document.getElementById("out");
+      try {
+        out.textContent = "Calling /get-signal ...";
+        const r = await fetch("/get-signal", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ stock: stock, volume: vol })
+        });
+        const j = await r.json();
+        out.textContent = JSON.stringify(j, null, 2);
+      } catch (e) {
+        out.textContent = "Error: " + e.message;
+      }
+    }
+    document.getElementById("btn").addEventListener("click", getSignal);
+  </script>
+</body>
+</html>
