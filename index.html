@@ -1,15 +1,52 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>📈 Halal Smart Stock App</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Halal Smart Stock</title>
+  <style>
+    :root{color-scheme:light dark}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#0b1320;color:#fff}
+    header{padding:16px 20px;background:#12233a}
+    h1{margin:0;font-size:18px}
+    main{padding:20px}
+    .row{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+    input,button{padding:10px 12px;border-radius:8px;border:1px solid #2a3c55;background:#0f1930;color:#e7eefc}
+    button{cursor:pointer}
+    pre{background:#0f1930;border:1px solid #2a3c55;border-radius:8px;padding:12px;overflow:auto}
+    iframe{width:100%;height:70vh;border:0;border-radius:10px;margin-top:16px}
+    a.btn{display:inline-block;margin-top:8px;padding:10px 12px;background:#18a058;color:#fff;text-decoration:none;border-radius:8px}
+  </style>
 </head>
 <body>
-  <h1>📈 Halal Smart Stock App</h1>
-  <p>✅ Welcome! This is the frontend UI</p>
-  <button onclick="getSignal()">Get Signal</button>
-  <div id="result"></div>
+  <header><h1>Halal Smart Stock ✅ Server Running</h1></header>
+  <main>
+    <p>Yeh homepage sirf test ke liye hai. Neeche aap external dashboard bhi embed kar sakte ho.</p>
 
-  <script src="app.js"></script>
+    <div class="row">
+      <input id="stock" placeholder="Stock e.g. TCS"/>
+      <input id="vol" type="number" placeholder="Volume e.g. 750000"/>
+      <button onclick="testSignal()">Get Signal</button>
+    </div>
+    <pre id="out">Click “Get Signal”.</pre>
+
+    <!-- Test iframe: apna URL yaha daal dena -->
+    <iframe src="https://www.google.com" title="Live"></iframe>
+    <a class="btn" href="https://www.google.com" target="_blank">Open in browser</a>
+  </main>
+
+  <script>
+    async function testSignal(){
+      const stock = document.getElementById('stock').value || 'TEST';
+      const vol = parseInt(document.getElementById('vol').value || '0', 10);
+      const r = await fetch('/get-signal', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({stock: stock, volume: vol})
+      });
+      const j = await r.json();
+      document.getElementById('out').textContent = JSON.stringify(j, null, 2);
+    }
+  </script>
 </body>
 </html>
