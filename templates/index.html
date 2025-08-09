@@ -1,51 +1,148 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Halal Smart Stock</title>
-  <style>
-    body { margin:0; font-family: Arial, sans-serif; background:#0c0f14; color:#e8eaed; }
-    header { padding:14px 16px; background:#111827; font-weight:700; }
-    .box { padding:16px; }
-    .row { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0; }
-    input { flex:1; min-width:120px; padding:10px; border-radius:8px; border:1px solid #334155; background:#111827; color:#e8eaed; }
-    button { padding:10px 14px; border:0; border-radius:8px; background:#2563eb; color:#fff; font-weight:700; }
-    pre { background:#0b1220; border:1px solid #1f2937; color:#d1d5db; padding:12px; border-radius:8px; min-height:90px; white-space:pre-wrap; }
-    small { opacity:0.7; }
-  </style>
-</head>
-<body>
-  <header>Halal Smart Stock</header>
-  <div class="box">
-    <small>Enter any stock name & volume, then tap <b>Get Signal</b>.</small>
-    <div class="row">
-      <input id="stock" placeholder="Stock e.g. TEST">
-      <input id="vol" type="number" placeholder="Volume e.g. 750000">
-      <button id="btn">Get Signal</button>
-    </div>
-    <pre id="out">Ready.</pre>
-  </div>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <script>
-    async function getSignal() {
-      const stock = document.getElementById("stock").value || "TEST";
-      const vol = parseInt(document.getElementById("vol").value || "0", 10);
-      const out = document.getElementById("out");
-      try {
-        out.textContent = "Calling /get-signal ...";
-        const r = await fetch("/get-signal", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ stock: stock, volume: vol })
-        });
-        const j = await r.json();
-        out.textContent = JSON.stringify(j, null, 2);
-      } catch (e) {
-        out.textContent = "Error: " + e.message;
-      }
-    }
-    document.getElementById("btn").addEventListener("click", getSignal);
-  </script>
-</body>
-</html>
+  <title>Halal Smart Stock</title>
+  <meta name="description" content="Live Halal stock tracker with GPT Power Indicator, news filter, and FII/DII smart alerts." />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#0b3d2e" />
+  <link rel="icon" href="/static/icon-192.png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/static/icon-512.png" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- Fonts (optional, system-safe fallback used if blocked) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <!-- Stealth overlay -->
+  <div id="stealthCurtain" class="hidden"></div>
+
+  <!-- Top App Bar -->
+  <header class="appbar">
+    <div class="brand">
+      <img src="/static/icon-192.png" alt="logo" class="logo" />
+      <h1>Halal Smart Stock</h1>
+    </div>
+
+    <nav class="actions">
+      <button id="stealthBtn" class="btn ghost" title="Stealth Mode (H)">
+        🕶
+      </button>
+      <button id="installBtn" class="btn ghost" title="Install App">
+        ⬇
+      </button>
+      <button id="themeBtn" class="btn ghost" title="Toggle Theme">
+        🌓
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main layout -->
+  <main class="container">
+    <!-- Left: controls -->
+    <aside class="paneCurtain" class="hidden"></div>
+
+  <!-- Top App Bar -->
+  <header class="appbar">
+    <div class="brand">
+      <img src="/static/icon-192.png" alt="logo" class="logo" />
+      <h1>Halal Smart Stock</h1>
+    </div>
+
+    <nav class="actions">
+      <button id="stealthBtn" class="btn ghost" title="Stealth Mode (H)">
+        🕶
+      </button>
+      <button id="installBtn" class="btn ghost" title="Install App">
+        ⬇
+      </button>
+      <button id="themeBtn" class="btn ghost" title="Toggle Theme">
+        🌓
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main layout -->
+  <main class="container">
+    <!-- Left: controls -->
+    <aside class="panel">
+      <!-- Auth -->
+      <section class="card">
+        <h2>Login / Signup</h2>
+        <form id="authForm" autocomplete="on">
+          <label> Name
+            <input id="authName" type="text" placeholder="Your name" required />
+          </label>
+          <label> Password
+            <input id="authPass" type="password" placeholder="Password" required />
+          </label>
+          <div class="row gap">
+            <button type="submit" class="btn primary w-50">Login</button>
+            <button id="logoutBtn" type="button" class="btn danger w-50">Logout</button>
+          </div>
+          <small id="authMsg" class="muted"></small>
+        </form>
+      </section>
+
+      <!-- Inputs -->
+      <section class="card">
+        <h2>Tracker</h2>
+        <label> Stock
+          <input id="stockInput" list="stockList" placeholder="e.g. TCS" />
+          <datalist id="stockList"></datalist>
+ </label>
+
+        <label> Volume
+          <input id="volInput" type="number" min="0" step="1000" placeholder="e.g. 750000" />
+        </label>
+
+        <div class="row gap">
+          <button id="getSignalBtn" class="btn primary w-50">Get Signal</button>
+          <button id="mapBtn" class="btn w-50">Trajectory</button>
+        </div>
+
+        <div id="light" class="traffic">
+          <span class="dot red"></span>
+          <span class="dot orange"></span>
+          <span class="dot green"></span>
+        </div>
+
+        <div class="row gap">
+          <button id="newsBtn" class="btn w-50">Latest News (18h)</button>
+          <button id="saveBtn" class="btn w-50">Save Watch</button>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" id="fiiSwitch" />
+          <span class="slider"></span>
+          <span class="switch-label">FII/DII Smart Alert (45s early)</span>
+        </label>
+      </section>
+
+      <!-- Tabs -->
+      <section class="card">
+        <h2>Tabs</h2>
+        <div class="tabs">
+          <button data-tab="live" class="tab active">Live</button>
+          <button data-tab="halal" class="tab">Halal</button>
+          <button data-tab="gainers" class="tab">Bhagne Wale</button>
+          <button data-tab="alerts" class="tab">Alerts</button>
+        </div>
+      </section>
+    </aside>
+
+    <!-- Right: content -->
+    <section class="content">
+      <!-- Live -->
+      <section id="tab-live" class="surface active">
+        <div class="grid">
+          <div class="ca
