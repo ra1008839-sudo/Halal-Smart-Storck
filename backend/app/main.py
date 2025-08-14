@@ -1,42 +1,25 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-import asyncio, json, random, time
+import time, random
 
-app = FastAPI(title="Halal Smart Stock API")
-app.add_middleware(CORSMiddleware, allow_origins=[""], allow_methods=[""], allow_headers=["*"])
+app = FastAPI()
 
-clients = {}  # symbol -> set(websocket)
+# CORS setup
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/health")
 def health():
-    return {"ok": True, "ts": int(time.time())}
+    return {"ok": True, "time": time.time()}
 
-@app.websocket("/ws/ticks")
-async def ws_ticks(ws: WebSocket):
-    await ws.accept()
-    q = ws.scope.get("query_string", b"").decode()
-    params = dict(p.split("=") for p in q.split("&") if p)
-    sym = (params.get("symbol") or "TCS").upper()
-    clients.setdefault(sym, set()).add(ws)
-    try:
-        while True:
-            await asyncio.sleep(30)
-    except WebSocketDisconnect:
-        clients[sym].discard(ws)
-
-async def mock_feeder():
-    price, vol = 3800.0, 100
-    while True:
-        price += random.uniform(-2, 2)
-        vol = max(0, vol + random.randint(-5, 15))
-        msg = {"s": "TCS", "p": round(price, 2), "v": vol, "t": int(time.time()*1000)}
-        for ws in list(clients.get("TCS", [])):
-            try:
-                await ws.send_text(json.dumps(msg))
-            except:
-                clients["TCS"].discard(ws)
-        await asyncio.sleep(0.5)
-
-@app.on_event("startup")
-async def _startup():
-    asyncio.create_task(mock_feeder())
+# Example mock stock signal
+@app.get("/signal")
+def get_signal(stock: str, volume: int):
+    score = random.randint(0, 100)
+    status = "BUY" if score > 60 else "WAIT"
+    return {"stock": stock, "volume": volume, "score": score, "status": status}
