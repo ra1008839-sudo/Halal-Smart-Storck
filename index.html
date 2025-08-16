@@ -4,66 +4,122 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Halal Smart Stock — Splash</title>
+
+  <!-- Prevent stale cache for splash -->
   <meta http-equiv="Cache-Control" content="no-store" />
+  <meta name="theme-color" content="#071714" />
+
+  <!-- Preload splash image & prefetch app -->
   <link rel="preload" href="assets/splash.jpg" as="image">
   <link rel="prefetch" href="templates/index.html">
+
   <style>
-    :root { --bg:#071714; --ring:0 0 0 6px rgba(21,211,154,.25); }
-    * { box-sizing: border-box; }
-    html,body { height:100%; margin:0; background:var(--bg); }
-    .wrap {
-      height:100%; width:100%;
-      display:grid; place-items:center;
+    :root{
+      --bg:#071714;          /* deep dark background */
+      --ring:0 0 0 8px rgba(21,211,154,.25);
+      --brand:#15d39a;
+      --muted:#a8c9c1;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:#fff}
+
+    /* Fullscreen center */
+    .wrap{
+      height:100%;width:100%;
+      display:grid;place-items:center;
+      background:
+        radial-gradient(800px 400px at 85% -10%, rgba(21,211,154,.10), transparent 60%),
+        radial-gradient(900px 500px at -10% 80%, rgba(53,245,197,.06), transparent 60%),
+        var(--bg);
       overflow:hidden;
     }
-    .card {
+
+    /* Card that holds the splash poster */
+    .card{
       position:relative;
-      width:min(92vw, 720px);
-      aspect-ratio: 3/2;          /* keeps nice size on all phones */
-      display:grid; place-items:center;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.45), var(--ring);
-      background:#0d2420;
+      width:min(94vw, 820px);
+      aspect-ratio:3/2;            /* balanced for most phones */
+      border-radius:24px;
       overflow:hidden;
-      animation: pop .45s ease-out both;
+      background:#0d2420;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 22px 70px rgba(0,0,0,.45), var(--ring);
+      animation:pop .45s ease-out both;
     }
-    .card img {
-      width:100%; height:100%; object-fit:cover;
-      display:block; filter:saturate(1.02) contrast(1.02);
-      animation: fadein .6s ease both;
+
+    .poster{
+      width:100%;height:100%;
+      object-fit:cover;            /* cover without distortion */
+      display:block;
+      filter:saturate(1.03) contrast(1.03);
+      animation:fadein .6s ease both;
     }
-    .hint {
-      position:fixed; bottom:18px; left:0; right:0;
-      text-align:center; color:#a8c9c1; font:500 12px ui-sans-serif,system-ui;
+
+    /* tiny loader hint */
+    .hint{
+      position:fixed; left:0; right:0; bottom:18px;
+      text-align:center; color:var(--muted);
+      font:500 12px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto;
     }
-    @keyframes pop { from { transform:scale(.96); opacity:.0 } to { transform:scale(1); opacity:1 } }
-    @keyframes fadein { from { opacity:0 } to { opacity:1 } }
+
+    /* Simple spinner */
+    .spinner{
+      position:absolute; right:14px; bottom:12px;
+      width:18px;height:18px;border-radius:50%;
+      border:2px solid rgba(255,255,255,.25);
+      border-top-color: var(--brand);
+      animation:spin .8s linear infinite;
+      box-shadow:0 0 0 2px rgba(0,0,0,.25) inset;
+    }
+
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes pop{from{transform:scale(.96);opacity:0} to{transform:scale(1);opacity:1}}
+    @keyframes fadein{from{opacity:0} to{opacity:1}}
+    @media (max-width:480px){ .card{border-radius:18px} }
+    @media (prefers-reduced-motion:reduce){
+      .card,.poster,.spinner{animation:none}
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <!-- 👇 yahan aapki splash image -->
-      <img src="assets/splash.jpg" alt="Halal Smart Stock">
+  <div class="wrap" role="main" aria-label="Splash screen">
+    <div class="card" aria-live="polite">
+      <!-- 👇 YAHI IMAGE DIKHNI HAI -->
+      <img class="poster" src="assets/splash.jpg" alt="Halal Smart Stock" />
+      <div class="spinner" aria-hidden="true"></div>
     </div>
   </div>
   <div class="hint">Loading app…</div>
 
   <script>
-    // ⏱ splash duration (ms)
-    const DURATION = 3500; // 3.5 seconds
-    const NEXT = "templates/index.html"; // aapka real app
+    // ====== CONFIG ======
+    const NEXT_URL   = "templates/index.html"; // aapka real app
+    const SPLASH_MS  = 3500;                   // minimum splash time (3.5s)
+    // =====================
 
-    // Safety: image load hone ke baad bhi max DURATION me redirect
-    const go = () => window.location.replace(NEXT);
-    const t = setTimeout(go, DURATION);
-    const img = document.querySelector("img");
-    img.addEventListener("load", () => {
-      // agar image turant load ho gayi to bhi timer respect karega
+    const img = document.querySelector(".poster");
+
+    // Wait at least SPLASH_MS, and also until image has loaded (whichever takes longer)
+    const minShown = new Promise(r => setTimeout(r, SPLASH_MS));
+    const imgReady = new Promise(r => {
+      if (img.complete) { r(); }
+      else img.addEventListener("load", r, { once:true });
     });
-    img.addEventListener("error", () => { clearTimeout(t); go(); }); // image fail -> seedha app
+
+    function go(){  // replace so back button splash pe na aaye
+      window.location.replace(NEXT_URL);
+    }
+
+    // If image fails, still proceed after minimum time
+    img.addEventListener("error", () => {
+      console.warn("Splash image failed to load; continuing.");
+      minShown.then(go);
+    }, { once:true });
+
+    Promise.all([minShown, imgReady]).then(go);
   </script>
 
+  <!-- No-JS fallback -->
   <noscript>
     <meta http-equiv="refresh" content="0; url=templates/index.html">
   </noscript>
