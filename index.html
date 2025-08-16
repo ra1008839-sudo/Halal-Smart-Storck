@@ -24,7 +24,7 @@
         var(--bg);
     }
     .card{
-      width:min(94vw, 820px); aspect-ratio:3/2; /* portrait chahiye to 9/16 kar dena */
+      width:min(94vw, 820px); aspect-ratio:3/2; /* portrait chahiye to 9/16 kar sakte ho */
       border-radius:24px; overflow:hidden; background:#0d2420;
       border:1px solid rgba(255,255,255,.08);
       box-shadow:0 22px 70px rgba(0,0,0,.45), var(--ring);
@@ -53,10 +53,8 @@
   <div class="hint">Loading app…</div>
 
   <script>
-    // ===== CONFIG =====
     const NEXT_URL  = "templates/index.html?noalert=1"; // app page + flag
     const SPLASH_MS = 3500;                              // 3.5 sec
-    // ==================
 
     const img = document.querySelector(".poster");
     const minShown = new Promise(r => setTimeout(r, SPLASH_MS));
