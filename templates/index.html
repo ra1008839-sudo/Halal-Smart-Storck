@@ -17,7 +17,7 @@
 
 /* Shell */
 .app{min-height:100vh;display:flex;flex-direction:column}
-.topbar{position:sticky;top:0;background:#fff;border-bottom:1px solid #e9e9ef;padding:12px 16px;z-index:5;display:flex;align-items:center;gap:12px}
+.topbar{position:sticky;top:0;background:#fff;border-bottom:1px solid #e9eef;padding:12px 16px;z-index:5;display:flex;align-items:center;gap:12px}
 .logo{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--brand);color:#fff;font-weight:800}
 .titles h2{margin:0;font-size:18px}
 .titles small{color:var(--muted)}
@@ -41,7 +41,7 @@
 .dua{margin:8px 12px;background:var(--brand);color:#fff;border-radius:10px;padding:8px 10px;display:flex;gap:8px;align-items:center}
 .dua span{background:#fff;color:var(--brand);border-radius:6px;padding:2px 6px;font-weight:700}
 
-.bbar{position:sticky;bottom:0;background:#fff;border-top:1px solid #e9e9ef;display:flex;justify-content:space-around;padding:8px}
+.bbar{position:sticky;bottom:0;background:#fff;border-top:1px solid #e9eef;display:flex;justify-content:space-around;padding:8px}
 .tab{background:none;border:none;padding:8px 10px;font-weight:700}
 .tab.active{color:var(--brand)}
 
@@ -57,6 +57,7 @@
 .table{width:100%;border-collapse:collapse}
 .table td,.table th{padding:6px 8px;border-bottom:1px solid #f0f0f0}
 .center{display:flex;align-items:center;gap:8px}
+.userpill{display:flex;gap:8px;align-items:center;background:#f3f4f6;border-radius:999px;padding:4px 8px}
 </style>
 </head>
 <body>
@@ -79,7 +80,8 @@
         <small class="small">where imaan meets investing</small>
       </div>
     </div>
-    <div style="margin-left:auto" id="auth-slot"></div>
+    <!-- AUTH SLOT: Login button / user badge renders here -->
+    <div id="auth-slot" style="margin-left:auto"></div>
   </header>
 
   <div class="quick">
@@ -174,6 +176,10 @@
   </div>
 </div>
 
+<!-- Firebase SDKs (compat) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
 <script>
 /* ============================
    Demo data (all client-side)
@@ -224,7 +230,7 @@ function openModal(key){
     const scored = computeGpt(DEMO.symbols);
     html += <p>Top 3 picks (simulated):</p><ol>${scored.top.map(s=><li><b>${s.symbol}</b> — score ${s.score} (${s.reason})</li>).join('')}</ol>;
     html += <p class="small">Rules combined: TA heuristics + volume boost + news sentiment demo. Avoid Mode: ${scored.avoidMode?'<b style="color:#a00">ON</b>':'<b style="color:#0a0">OFF</b>'}</p>;
-    html += <div style="margin-top:10px"><button class="btn" onclick="playBeep(\\'buy\\')">Play Buy Beep</button> <button class="btn" onclick="playBeep(\\'sell\\')">Play Sell Beep</button></div>;
+    html += <div style="margin-top:10px"><button class="btn" onclick="playBeep('buy')">Play Buy Beep</button> <button class="btn" onclick="playBeep('sell')">Play Sell Beep</button></div>;
     bodyEl.innerHTML = html;
   } else if(key === 'halal'){
     titleEl.textContent = 'Halal Stock List';
@@ -233,8 +239,7 @@ function openModal(key){
   } else if(key === 'trail'){
     titleEl.textContent = 'Trailing Stop Loss (Simulator)';
     bodyEl.innerHTML = trailHtml();
-    // must attach event listeners after injecting
-    setTimeout(()=>attachTrailEvents(), 50);
+    setTimeout(()=>attachTrailEvents(),50);
   } else if(key === 'news'){
     titleEl.textContent = '18-hour Breaking News';
     html += <p>Showing last 18 hours (demo):</p>;
@@ -263,18 +268,17 @@ function closeModal(){ document.getElementById('modal').classList.add('hidden');
    GPT Power (demo heuristic)
    ============================ */
 function computeGpt(symbols){
-  // Simple deterministic pseudo-scoring so results are stable across runs
   const seeded = (s) => s.split('').reduce((a,c)=>a + c.charCodeAt(0), 0);
   const scored = symbols.map(sym=>{
     const base = seeded(sym) % 80;
     const volBoost = (sym[0] < 'H') ? 8 : 0;
-    const newsBoost = (Math.random() > 0.7) ? 6 : 0; // occasional news bump
+    const newsBoost = (Math.random() > 0.7) ? 6 : 0;
     const score = Math.min(99, Math.max(10, base + volBoost + newsBoost));
     const reason = (volBoost? 'Volume boost' : 'Sector strength') + (newsBoost? ' + news' : '');
     return { symbol: sym, score, reason };
   }).sort((a,b)=>b.score-a.score);
   const top = scored.slice(0,3);
-  const avoidMode = top[0].score < 60; // safety rule
+  const avoidMode = top[0].score < 60;
   return { top, all:scored, avoidMode };
 }
 
@@ -318,7 +322,6 @@ function trailHtml(){
   `;
 }
 
-/* Trailing utility functions (client-side) */
 function computeATRfromMock(candles, period=14){
   if(!candles || candles.length < period+1) return 1.2;
   const trs = [];
@@ -336,7 +339,6 @@ function computeATRfromMock(candles, period=14){
 }
 
 function attachTrailEvents(){
-  // mock candles for ATR
   const candles = Array.from({length:30},(_,i)=>{
     const base = 90 + i*0.5 + (Math.random()-0.5)*2;
     const h = +(base + Math.random()*2).toFixed(2);
@@ -379,7 +381,6 @@ function attachTrailEvents(){
   };
   document.getElementById('tick-down').onclick = () => {
     price = +(price - (Math.random()*2)).toFixed(2);
-    // stop does not move down by rule
     updateUI();
   };
   document.getElementById('reset-trail').onclick = () => {
@@ -389,10 +390,8 @@ function attachTrailEvents(){
     updateUI();
   };
 
-  // initial UI
   updateUI();
 
-  // change label depending on mode
   document.getElementById('trail-mode').onchange = () => {
     const mode = document.getElementById('trail-mode').value;
     const label = document.getElementById('val-label');
@@ -430,14 +429,99 @@ function startVolumeLights(){
 }
 
 /* ============================
-   No auto-close logic included
+   Firebase Google Login - configure below
    ============================ */
+
+/*
+  IMPORTANT:
+  1) Go to https://console.firebase.google.com and create a project.
+  2) In project -> Authentication -> Sign-in method -> Enable Google.
+  3) In project settings -> Add web app -> copy config values and paste into FIREBASE_CONFIG.
+  4) After updating the config below, commit this file and open the site (https required for popup).
+*/
+
+const FIREBASE_CONFIG = {
+  apiKey: "REPLACE_WITH_YOUR_API_KEY",
+  authDomain: "REPLACE_WITH_YOUR_PROJECT.firebaseapp.com",
+  projectId: "REPLACE_WITH_YOUR_PROJECT_ID",
+  storageBucket: "REPLACE_WITH_YOUR_PROJECT.appspot.com",
+  messagingSenderId: "REPLACE_WITH_YOUR_SENDER_ID",
+  appId: "REPLACE_WITH_YOUR_APP_ID"
+};
+
+function safeText(msg){
+  const slot = document.getElementById('auth-slot');
+  if(!slot) return;
+  slot.innerHTML = '<small style="color:#a00;">'+msg+'</small>';
+}
+
+(function initFirebaseAuth(){
+  // if not configured, show small note in header
+  if(!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey.indexOf('REPLACE_')===0){
+    safeText('Firebase not configured — login disabled');
+    window.__HALAL_USER = null;
+    return;
+  }
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG);
+    const auth = firebase.auth();
+
+    // render UI in header slot
+    const slot = document.getElementById('auth-slot');
+    function render(user){
+      slot.innerHTML = '';
+      if(!user){
+        const btn = document.createElement('button');
+        btn.className = 'btn primary';
+        btn.textContent = 'Login with Google';
+        btn.onclick = async () => {
+          const provider = new firebase.auth.GoogleAuthProvider();
+          // on mobile, popup may be blocked — use redirect fallback
+          if(/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)){
+            try { await auth.signInWithRedirect(provider); } catch(e){ alert('Redirect login failed: '+(e.message||e)); }
+          } else {
+            try { await auth.signInWithPopup(provider); }
+            catch(e){
+              // fallback to redirect if popup blocked
+              console.warn('Popup failed, trying redirect', e);
+              try{ await auth.signInWithRedirect(provider); }catch(err){ alert('Login error: '+(err.message||err)); }
+            }
+          }
+        };
+        slot.appendChild(btn);
+      } else {
+        const wrap = document.createElement('div');
+        wrap.className = 'userpill';
+        const img = document.createElement('img');
+        img.src = user.photoURL || '';
+        img.width = 28; img.height = 28;
+        img.style.borderRadius = '18px';
+        img.style.objectFit = 'cover';
+        const name = document.createElement('span');
+        name.textContent = (user.displayName||'User').split(' ')[0];
+        const logout = document.createElement('button');
+        logout.className = 'btn';
+        logout.textContent = 'Logout';
+        logout.onclick = ()=> auth.signOut();
+        wrap.appendChild(img); wrap.appendChild(name); wrap.appendChild(logout);
+        slot.appendChild(wrap);
+      }
+    }
+
+    auth.onAuthStateChanged(function(user){
+      render(user);
+      window.__HALAL_USER = user || null;
+    });
+
+  }catch(e){
+    console.error('Firebase init error', e);
+    safeText('Firebase init failed');
+  }
+})();
 
 /* ============================
-   Utility: prevent modal button clicks closing parent
+   No auto-close logic included
    ============================ */
-/* nothing extra needed for now */
-
 </script>
 </body>
 </html>
