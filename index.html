@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Halal Smart Stock — Splash</title>
 
-  <!-- fresh load for splash -->
   <meta http-equiv="Cache-Control" content="no-store" />
   <meta name="theme-color" content="#071714" />
 
   <!-- preload splash & prefetch app -->
   <link rel="preload" href="assets/splash.jpg" as="image" />
-  <link rel="prefetch" href="templates/index.html" />
+  <link rel="prefetch" href="templates/index.html?noalert=1" />
 
   <style>
     :root{ --bg:#071714; --brand:#15d39a; --muted:#a8c9c1; --ring:0 0 0 8px rgba(21,211,154,.25) }
@@ -25,7 +24,7 @@
         var(--bg);
     }
     .card{
-      width:min(94vw, 820px); aspect-ratio:3/2;  /* portrait poster ho to 9/16 kar sakte ho */
+      width:min(94vw, 820px); aspect-ratio:3/2; /* portrait chahiye to 9/16 kar dena */
       border-radius:24px; overflow:hidden; background:#0d2420;
       border:1px solid rgba(255,255,255,.08);
       box-shadow:0 22px 70px rgba(0,0,0,.45), var(--ring);
@@ -47,7 +46,6 @@
 <body>
   <div class="wrap" role="main" aria-label="Splash screen">
     <div class="card" aria-live="polite">
-      <!-- AAPKI POSTER IMAGE -->
       <img class="poster" src="assets/splash.jpg" alt="Halal Smart Stock" />
       <div class="spinner" aria-hidden="true"></div>
     </div>
@@ -56,8 +54,8 @@
 
   <script>
     // ===== CONFIG =====
-    const NEXT_URL  = "templates/index.html"; // aapka real app
-    const SPLASH_MS = 3500;                   // 3.5 sec
+    const NEXT_URL  = "templates/index.html?noalert=1"; // app page + flag
+    const SPLASH_MS = 3500;                              // 3.5 sec
     // ==================
 
     const img = document.querySelector(".poster");
@@ -65,10 +63,8 @@
     const imgReady = new Promise(r => img.complete ? r() : img.addEventListener("load", r, {once:true}));
 
     function go(){
-      // 👉 next page par alerts/confirm/prompt mute karne ka flag
       try { sessionStorage.setItem('NO_ALERT', '1'); } catch(e){}
-      // back se splash na aaye
-      window.location.replace(NEXT_URL);
+      window.location.replace(NEXT_URL); // back pe splash na aaye
     }
 
     img.addEventListener("error", () => { minShown.then(go); }, {once:true});
