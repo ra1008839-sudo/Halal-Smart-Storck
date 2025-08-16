@@ -1,28 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Halal Smart Stock</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Halal Smart Stock — Splash</title>
+  <meta http-equiv="Cache-Control" content="no-store" />
+  <link rel="preload" href="assets/splash.jpg" as="image">
+  <link rel="prefetch" href="templates/index.html">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0a1c1c;
-      color: white;
-      text-align: center;
-      padding: 50px;
+    :root { --bg:#071714; --ring:0 0 0 6px rgba(21,211,154,.25); }
+    * { box-sizing: border-box; }
+    html,body { height:100%; margin:0; background:var(--bg); }
+    .wrap {
+      height:100%; width:100%;
+      display:grid; place-items:center;
+      overflow:hidden;
     }
-    h1 {
-      color: #00ff88;
+    .card {
+      position:relative;
+      width:min(92vw, 720px);
+      aspect-ratio: 3/2;          /* keeps nice size on all phones */
+      display:grid; place-items:center;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45), var(--ring);
+      background:#0d2420;
+      overflow:hidden;
+      animation: pop .45s ease-out both;
     }
-    p {
-      margin-top: 20px;
+    .card img {
+      width:100%; height:100%; object-fit:cover;
+      display:block; filter:saturate(1.02) contrast(1.02);
+      animation: fadein .6s ease both;
     }
+    .hint {
+      position:fixed; bottom:18px; left:0; right:0;
+      text-align:center; color:#a8c9c1; font:500 12px ui-sans-serif,system-ui;
+    }
+    @keyframes pop { from { transform:scale(.96); opacity:.0 } to { transform:scale(1); opacity:1 } }
+    @keyframes fadein { from { opacity:0 } to { opacity:1 } }
   </style>
 </head>
 <body>
-  <h1>Welcome to Halal Smart Stock 🚀</h1>
-  <p>Your site is live on GitHub Pages!</p>
-  <p>Inshallah, app yahan se chalna start ho jayega ✅</p>
+  <div class="wrap">
+    <div class="card">
+      <!-- 👇 yahan aapki splash image -->
+      <img src="assets/splash.jpg" alt="Halal Smart Stock">
+    </div>
+  </div>
+  <div class="hint">Loading app…</div>
+
+  <script>
+    // ⏱ splash duration (ms)
+    const DURATION = 3500; // 3.5 seconds
+    const NEXT = "templates/index.html"; // aapka real app
+
+    // Safety: image load hone ke baad bhi max DURATION me redirect
+    const go = () => window.location.replace(NEXT);
+    const t = setTimeout(go, DURATION);
+    const img = document.querySelector("img");
+    img.addEventListener("load", () => {
+      // agar image turant load ho gayi to bhi timer respect karega
+    });
+    img.addEventListener("error", () => { clearTimeout(t); go(); }); // image fail -> seedha app
+  </script>
+
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=templates/index.html">
+  </noscript>
 </body>
 </html>
