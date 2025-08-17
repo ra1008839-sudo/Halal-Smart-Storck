@@ -4,424 +4,207 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Halal Smart Stock</title>
-<meta name="theme-color" content="#0e7a34" />
+<meta name="theme-color" content="#0ea35a" />
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
-:root{--brand:#0e7a34;--bg:#f6f7fb;--card:#fff;--border:#e5e7eb;--muted:#6b7280;--ok:#22c55e;--danger:#ef4444}
-*{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto;background:var(--bg);color:#111}
-.hidden{display:none}
-
-/* Splash */
-.splash{display:flex;align-items:center;justify-content:center;height:100vh;background:linear-gradient(135deg,#0e7a34,#19a04a)}
-.splash-card{background:#fff;color:var(--brand);border-radius:20px;padding:28px 36px;box-shadow:0 12px 30px rgba(0,0,0,.15);text-align:center}
-.splash-card h1{font-size:40px;margin:0 0 6px}
-.splash-card p{margin:0;font-weight:600}
-
-/* App shell */
-.app{min-height:100vh;display:flex;flex-direction:column}
-.topbar{position:sticky;top:0;background:#fff;border-bottom:1px solid #e9eef;padding:12px 16px;z-index:5;display:flex;align-items:center;gap:12px}
-.logo{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--brand);color:#fff;font-weight:800}
-.titles h2{margin:0;font-size:18px}
-.titles small{color:var(--muted)}
-
-.quick{display:flex;gap:8px;padding:10px 12px;overflow:auto}
-.btn{border:1px solid #d4d7dd;background:#fff;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;white-space:nowrap}
-.btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
-.btn.ghost{background:#fff}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;padding:12px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:transform .08s,box-shadow .18s}
-.card h3{margin:0 0 8px}
-.card:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(0,0,0,.06)}
-.pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;margin-top:6px}
-.pill.ok{background:#e6f7ed;color:var(--brand)}
-.pill.warn{background:#fff6e5;color:#a05d00}
-
-.dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;margin-right:6px}
-.dot.green{background:var(--ok)} .dot.red{background:var(--danger)}
-
-.dua{margin:8px 12px;background:var(--brand);color:#fff;border-radius:10px;padding:8px 10px;display:flex;gap:8px;align-items:center}
-.dua span{background:#fff;color:var(--brand);border-radius:6px;padding:2px 6px;font-weight:700}
-
-.bbar{position:sticky;bottom:0;background:#fff;border-top:1px solid #e9eef;display:flex;justify-content:space-around;padding:8px}
-.tab{background:none;border:none;padding:8px 10px;font-weight:700}
-.tab.active{color:var(--brand)}
-
-/* Modal */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;padding:16px}
-.modal.show{display:flex}
-.modal-card{background:#fff;border-radius:12px;max-width:720px;width:100%;box-shadow:0 16px 40px rgba(0,0,0,.18);overflow:hidden}
-.modal-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid #eee}
-.modal-body{padding:14px;max-height:65vh;overflow:auto}
-.modal-foot{display:flex;gap:10px;justify-content:flex-end;padding:12px 14px;border-top:1px solid #eee}
-.close{border:none;background:#f3f4f6;border-radius:10px;padding:6px 10px;cursor:pointer}
-
-.small{font-size:13px;color:var(--muted)}
-.table{width:100%;border-collapse:collapse}
-.table td,.table th{padding:6px 8px;border-bottom:1px solid #f0f0f0}
-.userpill{display:flex;gap:8px;align-items:center;background:#f3f4f6;border-radius:999px;padding:4px 8px}
+/* Simple safe inline styles — copy/paste-safe */
+:root{--brand:#0ea35a;--bg1:#0b2f22;--text:#f3fff7}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#082b1e,#072114);color:var(--text)}
+.header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(255,255,255,0.04);position:sticky;top:0}
+.logo{width:44px;height:44px;border-radius:8px;background:#fff;color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:800}
+.title{font-size:18px;margin:0}
+.container{max-width:980px;margin:14px auto;padding:0 12px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:rgba(255,255,255,0.03);padding:12px;border-radius:12px}
+.small{font-size:13px;color:rgba(255,255,255,0.8)}
+.btn{background:var(--brand);border:0;color:#fff;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.08)}
+.userpill{display:flex;gap:8px;align-items:center;background:rgba(0,0,0,0.2);padding:4px 8px;border-radius:999px}
+.splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0ea35a,#067a3f);z-index:9999}
+.hide{display:none}
+.footer{padding:18px;text-align:center;color:rgba(255,255,255,0.6)}
+.install-hint{font-size:13px;color:rgba(255,255,255,0.7);margin-top:8px}
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
-<section id="splash" class="splash">
-  <div class="splash-card">
-    <h1>Bismillah</h1>
-    <p>Halal Smart Stock</p>
+<!-- Splash (3s) -->
+<div id="splash" class="splash">
+  <div style="background:#fff;padding:20px;border-radius:12px;color:#0b2f22;text-align:center">
+    <h1 style="margin:0;font-size:28px">Bismillah</h1>
+    <div class="small">Halal Smart Stock</div>
   </div>
-</section>
+</div>
 
-<!-- APP -->
-<div id="app" class="app hidden">
-  <header class="topbar">
-    <div style="display:flex;gap:12px;align-items:center;">
-      <div class="logo">H</div>
-      <div class="titles">
-        <h2>Halal Smart Stock</h2>
-        <small class="small">where imaan meets investing</small>
-      </div>
+<div id="app" class="hide">
+  <header class="header">
+    <div class="logo">H</div>
+    <div>
+      <div class="title">Halal Smart Stock</div>
+      <div class="small">Iman + Investing</div>
     </div>
     <div id="auth-slot" style="margin-left:auto"></div>
   </header>
 
-  <div class="quick">
-    <button class="btn" onclick="openModal('gpt')">GPT Power</button>
-    <button class="btn" onclick="openModal('halal')">Halal List</button>
-    <button class="btn" onclick="openModal('trail')">Trailing SL</button>
-    <button class="btn" onclick="openModal('news')">18h News</button>
-    <button class="btn" onclick="openModal('indices')">All Indices</button>
-    <button class="btn" onclick="openModal('global')">World/Crude/USD</button>
-    <button class="btn" onclick="openModal('fiidi')">FII/DII</button>
-  </div>
-
-  <main class="grid">
-    <article class="card" onclick="openModal('gpt')">
-      <h3>GPT Power Indicator</h3>
-      <p class="small">Top-3 demo picks · Avoid Mode if rules fail</p>
-    </article>
-
-    <article class="card" onclick="openModal('halal')">
-      <h3>Halal (Shariah) Stock List</h3>
-      <p class="small">Auto-update schedule 09:10 (demo)</p>
-      <div class="pill ok">Compliant</div>
-    </article>
-
-    <article class="card" onclick="openModal('trail')">
-      <h3>Trailing Stop Loss</h3>
-      <p class="small">% / ATR / Points — simulator</p>
-      <div class="pill warn">Simulated</div>
-    </article>
-
-    <article class="card" onclick="openModal('indices')">
-      <h3>All Index Data</h3>
-      <p class="small">Nifty, Sensex, BankNifty (demo)</p>
-    </article>
-
-    <article class="card" onclick="openModal('global')">
-      <h3>Global Cues</h3>
-      <p class="small">Brent, WTI, USDINR, GIFT Nifty, DXY (demo)</p>
-    </article>
-
-    <article class="card" onclick="openModal('news')">
-      <h3>18-hour Breaking News</h3>
-      <p class="small">Latest movers (demo)</p>
-    </article>
-
-    <article class="card" onclick="openModal('fiidi')">
-      <h3>FII / DII Signals</h3>
-      <p class="small">Institutional flows (demo)</p>
-    </article>
-
-    <article class="card">
-      <h3>Alert Beeps</h3>
-      <p class="small">Buy/Sell test</p>
-      <div style="margin-top:8px">
-        <button class="btn" onclick="playBeep('buy')">Buy Beep</button>
-        <button class="btn" onclick="playBeep('sell')">Sell Beep</button>
+  <main class="container">
+    <!-- Quick actions -->
+    <section class="card">
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button id="shareBtn" class="btn">Share on WhatsApp</button>
+        <button id="refreshBtn" class="btn ghost">Refresh Data</button>
+        <button id="installBtn" class="btn ghost hide">Install App</button>
       </div>
-    </article>
+      <div class="install-hint">Share this link on WhatsApp. Users can open and Add to Home Screen (PWA) — no Play Store required.</div>
+    </section>
 
-    <article class="card">
-      <h3>Live Volume Light</h3>
-      <p class="small"><span class="dot green" id="led-green"></span> spike · <span class="dot red" id="led-red"></span> drop</p>
-    </article>
+    <!-- Features grid -->
+    <section class="row" style="margin-top:12px">
+      <div class="card">
+        <h3 style="margin:0 0 6px">GPT Power</h3>
+        <div id="gptTop" class="small">Loading demo picks…</div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 6px">Trailing Stop Loss (Demo)</h3>
+        <div id="trailBox" class="small">Use simulator after deploy.</div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 6px">Halal Stock List</h3>
+        <ul id="halalList" class="small">
+          <li>TCS</li><li>INFY</li><li>HDFCBANK</li><li>ITC</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 6px">Markets (Demo)</h3>
+        <div id="indicesBox" class="small">NIFTY: — • BANKNIFTY: — • SENSEX: —</div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 6px">18-Hour News (Demo)</h3>
+        <div id="newsBox" class="small">No live feed yet. Press Refresh.</div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 6px">FII / DII Signals (Demo)</h3>
+        <div class="small">Institutional flow sample data.</div>
+      </div>
+    </section>
   </main>
 
-  <section class="dua">
-    <span>09:00</span>
-    <marquee behavior="scroll" direction="left" style="padding-left:8px">
-      Bismillah — Daily halal rizq dua (Hindi). Day1=original Day7; Day2=original Day3.
-    </marquee>
-  </section>
-
-  <footer class="bbar">
-    <button class="tab active">Home</button>
-    <button class="tab">Watchlist</button>
-    <button class="tab">Portfolio</button>
-    <button class="tab">More</button>
-  </footer>
+  <footer class="footer">© <span id="year"></span> Halal Smart Stock — Share via WhatsApp</footer>
 </div>
 
-<!-- MODAL -->
-<div id="modal" class="modal" role="dialog" aria-modal="true">
-  <div class="modal-card">
-    <div class="modal-head">
-      <h3 id="modal-title">Title</h3>
-      <button class="close" onclick="closeModal()">✕</button>
-    </div>
-    <div id="modal-body" class="modal-body">Content</div>
-    <div class="modal-foot">
-      <button class="btn ghost" onclick="closeModal()">Close</button>
-    </div>
-  </div>
+<!-- modal -->
+<div id="modal" style="display:none;position:fixed;inset:0;align-items:center;justify-content:center;background:rgba(0,0,0,0.5)">
+  <div id="modalContent" style="background:#fff;color:#000;padding:14px;border-radius:8px;max-width:720px;margin:0 12px"></div>
 </div>
 
-<!-- Firebase (compat) -->
+<!-- Firebase SDKs (compat) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
 <script>
-/* ----------------- DEMO DATA ----------------- */
-const DEMO = {
-  indices:[
-    {name:'NIFTY 50', value:24500.2, changePct:0.42},
-    {name:'SENSEX', value:80780.9, changePct:-0.15},
-    {name:'BANK NIFTY', value:52450.1, changePct:0.31},
-    {name:'FIN NIFTY', value:23000.5, changePct:0.12}
-  ],
-  global:{
-    us:{sp500:5600.12,dow:39850.3,nasdaq:17890.5},
-    crude:{brent:86.2,wti:82.7},
-    fx:{usdinr:83.05},
-    gift:{value:24550.5,changePct:0.18},
-    dollar:{dxy:103.8}
-  },
-  halal:['TCS','INFY','HCLTECH','ITC','HDFCBANK','TITAN'],
-  news:[
-    {title:'Banking stocks rally as FII inflows rise', time: Date.now()-2*3600*1000, source:'DemoWire', sentiment:'positive'},
-    {title:'Crude steady; markets eye policy', time: Date.now()-4*3600*1000, source:'DemoWire', sentiment:'neutral'},
-    {title:'Midcap noise; index pares gains', time: Date.now()-6*3600*1000, source:'DemoWire', sentiment:'negative'}
-  ],
-  symbols:['TCS','INFY','HDFCBANK','ITC','RELIANCE','HCLTECH','ICICIBANK','AXISBANK','KOTAKBANK','SBIN']
-};
-
-/* -------------- Splash -> Home -------------- */
-window.addEventListener('load', () => {
-  setTimeout(()=> {
-    document.getElementById('splash').classList.add('hidden');
-    document.getElementById('app').classList.remove('hidden');
-    startVolumeLights();
-  }, 3000);
-});
-
-/* ------------------ Modal ------------------- */
-const modal = document.getElementById('modal');
-function openModal(key){
-  const titleEl = document.getElementById('modal-title');
-  const bodyEl = document.getElementById('modal-body');
-  let html='';
-  if(key==='gpt'){
-    titleEl.textContent='GPT Power Indicator (demo)';
-    const r = computeGpt(DEMO.symbols);
-    html += <p>Top 3 picks:</p><ol>${r.top.map(s=><li><b>${s.symbol}</b> — score ${s.score} (${s.reason})</li>).join('')}</ol>;
-    html += <p class="small">Avoid Mode: ${r.avoidMode?'<b style="color:#a00">ON</b>':'<b style="color:#0a0">OFF</b>'}</p>;
-    html += <div style="margin-top:10px"><button class="btn" onclick="playBeep('buy')">Buy Beep</button> <button class="btn" onclick="playBeep('sell')">Sell Beep</button></div>;
-  } else if(key==='halal'){
-    titleEl.textContent='Halal Stock List';
-    html += <p>Auto update 09:10 (demo)</p><ul>${DEMO.halal.map(s=><li>${s}</li>).join('')}</ul>;
-  } else if(key==='trail'){
-    titleEl.textContent='Trailing Stop Loss (Simulator)';
-    html = trailHtml(); setTimeout(attachTrailEvents,50);
-  } else if(key==='news'){
-    titleEl.textContent='18-hour Breaking News';
-    html = DEMO.news.map(n=><div style="margin-bottom:10px"><b>${n.title}</b><div class="small">${n.source} • ${new Date(n.time).toLocaleString()}</div><div class="small">Sentiment: ${n.sentiment}</div></div>).join('');
-  } else if(key==='indices'){
-    titleEl.textContent='All Indices';
-    html = <table class="table"><thead><tr><th>Index</th><th>Value</th><th>Change%</th></tr></thead><tbody>${DEMO.indices.map(i=><tr><td>${i.name}</td><td>${i.value}</td><td>${i.changePct>0?'+':''}${i.changePct}%</td></tr>).join('')}</tbody></table>;
-  } else if(key==='global'){
-    titleEl.textContent='Global Cues';
-    const g=DEMO.global;
-    html = <ul><li>Brent: ${g.crude.brent}</li><li>WTI: ${g.crude.wti}</li><li>USD/INR: ${g.fx.usdinr}</li><li>GIFT Nifty: ${g.gift.value} (${g.gift.changePct}%)</li><li>DXY: ${g.dollar.dxy}</li><li>US S&P: ${g.us.sp500} • Nasdaq: ${g.us.nasdaq}</li></ul>;
-  } else if(key==='fiidi'){
-    titleEl.textContent='FII / DII Activity';
-    html = <ul><li>FII net inflow (demo) — Banks/IT</li><li>DII outflow — Midcaps</li></ul>;
-  }
-  bodyEl.innerHTML = html;
-  modal.classList.add('show');
-}
-function closeModal(){ modal.classList.remove('show'); }
-
-/* --------------- GPT Power demo -------------- */
-function computeGpt(symbols){
-  const seed = s => s.split('').reduce((a,c)=>a+c.charCodeAt(0),0);
-  const scored = symbols.map(sym=>{
-    const base = seed(sym)%80;
-    const vol = (sym[0]<'H')?8:0;
-    const news = (Math.random()>0.7)?6:0;
-    const score = Math.min(99,Math.max(10,base+vol+news));
-    const reason = (vol?'Volume boost':'Sector strength') + (news?' + news':'');
-    return {symbol:sym,score,reason};
-  }).sort((a,b)=>b.score-a.score);
-  return { top: scored.slice(0,3), all:scored, avoidMode: scored[0].score<60 };
-}
-
-/* ---------- Trailing Stop Loss (UI) --------- */
-function trailHtml(){return `
-  <div style="display:grid;gap:8px">
-    <div style="display:flex;gap:8px">
-      <label>Mode
-        <select id="trail-mode" class="small">
-          <option value="percent">Percentage (%)</option>
-          <option value="atr">ATR x Multiplier</option>
-          <option value="points">Fixed Points</option>
-        </select>
-      </label>
-      <label id="val-label">Value
-        <input id="trail-value" type="number" value="2" step="0.1" style="width:80px"/>
-      </label>
-      <label>Entry
-        <input id="trail-entry" type="number" value="100" step="0.1" style="width:110px"/>
-      </label>
-      <label>High
-        <input id="trail-high" type="number" value="100" step="0.1" style="width:110px"/>
-      </label>
-    </div>
-    <div class="small">ATR (demo) mock candles se estimate hota hai.</div>
-    <div style="display:flex;gap:8px">
-      <button class="btn" id="tick-up">Tick ↑</button>
-      <button class="btn" id="tick-down">Tick ↓</button>
-      <button class="btn" id="reset-trail">Reset</button>
-    </div>
-    <div style="margin-top:8px">
-      <div>Current Price: <b id="price">100</b></div>
-      <div>Highest since entry: <b id="highest">100</b></div>
-      <div>Trailing Stop: <b id="stop" style="color:#a00">98.00</b></div>
-    </div>
-  </div>`;}
-
-function computeATRfromMock(candles, period=14){
-  if(!candles || candles.length<period+1) return 1.2;
-  const trs=[]; for(let i=1;i<candles.length;i++){
-    const tr=Math.max(
-      Math.abs(candles[i].h-candles[i].l),
-      Math.abs(candles[i].h-candles[i-1].c),
-      Math.abs(candles[i].l-candles[i-1].c)
-    ); trs.push(tr);
-  }
-  const slice=trs.slice(-period);
-  return slice.reduce((a,b)=>a+b,0)/slice.length;
-}
-
-function attachTrailEvents(){
-  const candles = Array.from({length:30},(_,i)=>{
-    const base = 90 + i*0.5 + (Math.random()-0.5)*2;
-    const h = +(base + Math.random()*2).toFixed(2);
-    const l = +(base - Math.random()*2).toFixed(2);
-    const c = +(l + Math.random()*(h-l)).toFixed(2);
-    return {h,l,c};
-  });
-  const atr = computeATRfromMock(candles,14);
-  let state = { highest: +document.getElementById('trail-high').value||100, stop: +( (+document.getElementById('trail-entry').value||100)*0.98 ).toFixed(2) };
-  let price = +document.getElementById('trail-entry').value||100;
-
-  const priceEl=()=>document.getElementById('price');
-  const highEl=()=>document.getElementById('highest');
-  const stopEl=()=>document.getElementById('stop');
-  function updateUI(){ priceEl().textContent=price.toFixed(2); highEl().textContent=state.highest.toFixed(2); stopEl().textContent=state.stop.toFixed(2); }
-
-  function nextStop(mode,value,p){
-    state.highest=Math.max(state.highest,p);
-    if(mode==='percent') state.stop=Math.max(state.stop, +(state.highest*(1-value/100)).toFixed(2));
-    else if(mode==='points') state.stop=Math.max(state.stop, +(state.highest-value).toFixed(2));
-    else if(mode==='atr') state.stop=Math.max(state.stop, +(state.highest-(value*atr)).toFixed(2));
-  }
-
-  document.getElementById('tick-up').onclick=()=>{
-    price=+(price+(Math.random()*2)).toFixed(2);
-    const mode=document.getElementById('trail-mode').value;
-    const value=+document.getElementById('trail-value').value||2;
-    nextStop(mode,value,price); updateUI();
-  };
-  document.getElementById('tick-down').onclick=()=>{ price=+(price-(Math.random()*2)).toFixed(2); updateUI(); };
-  document.getElementById('reset-trail').onclick=()=>{
-    const entry=+document.getElementById('trail-entry').value||100;
-    state={highest:entry,stop:+(entry*0.98).toFixed(2)}; price=entry; updateUI();
-  };
-
-  updateUI();
-  document.getElementById('trail-mode').onchange=()=>{
-    const mode=document.getElementById('trail-mode').value, lbl=document.getElementById('val-label');
-    if(mode==='percent') lbl.innerHTML='Value <input id="trail-value" type="number" value="2" step="0.1" style="width:80px"/>';
-    else if(mode==='atr') lbl.innerHTML='ATR x <input id="trail-value" type="number" value="1.5" step="0.1" style="width:80px"/>';
-    else lbl.innerHTML='Points <input id="trail-value" type="number" value="5" step="0.1" style="width:80px"/>';
-  };
-}
-
-/* --------------- Audio Beeps ---------------- */
-function playBeep(kind='buy'){
-  try{
-    const ctx=new (window.AudioContext||window.webkitAudioContext)();
-    const o=ctx.createOscillator(), g=ctx.createGain();
-    o.type='sine'; o.frequency.value=(kind==='buy'?880:440);
-    g.gain.setValueAtTime(0.0001,ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.2,ctx.currentTime+0.02);
-    g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.25);
-    o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime+0.26);
-  }catch(e){console.warn('Audio unavailable',e);}
-}
-
-/* ----------- Volume LEDs demo --------------- */
-function startVolumeLights(){
-  const g=document.getElementById('led-green'), r=document.getElementById('led-red');
-  setInterval(()=>g.style.opacity=(Math.random()>0.5?1:0.25),1200);
-  setInterval(()=>r.style.opacity=(Math.random()>0.7?1:0.25),1500);
-}
-
-/* ------------ Firebase Login (Google) -------- */
-/*
-  Steps:
-  1) https://console.firebase.google.com -> Project -> Authentication -> Enable Google.
-  2) Project settings -> Add Web app -> copy config -> paste below.
+/* ----------------- CONFIGURE FIREBASE -----------------
+  1) Go to https://console.firebase.google.com -> Create project
+  2) In Firebase Console -> Build -> Authentication -> Sign-in method -> Enable Google
+  3) Project settings -> Your apps -> Add Web app -> copy config object
+  4) Replace the placeholders below with your values
 */
 const FIREBASE_CONFIG = {
-  apiKey: "REPLACE_WITH_YOUR_API_KEY",
-  authDomain: "REPLACE_WITH_YOUR_PROJECT.firebaseapp.com",
-  projectId: "REPLACE_WITH_YOUR_PROJECT_ID",
-  storageBucket: "REPLACE_WITH_YOUR_PROJECT.appspot.com",
-  messagingSenderId: "REPLACE_WITH_YOUR_SENDER_ID",
-  appId: "REPLACE_WITH_YOUR_APP_ID"
+  apiKey: "REPLACE_API_KEY",
+  authDomain: "REPLACE_PROJECT.firebaseapp.com",
+  projectId: "REPLACE_PROJECT_ID",
+  storageBucket: "REPLACE_PROJECT.appspot.com",
+  messagingSenderId: "REPLACE_SENDER_ID",
+  appId: "REPLACE_APP_ID"
 };
 
+/* --------------- UI: splash -> app ------------------ */
+document.getElementById('year').textContent = new Date().getFullYear();
+setTimeout(()=>{ document.getElementById('splash').classList.add('hide'); document.getElementById('app').classList.remove('hide'); }, 3000);
+
+/* ---------------- demo fillers -------------------- */
+function fillDemo(){
+  document.getElementById('gptTop').innerHTML = '<ol><li>INFY — 78</li><li>TCS — 73</li><li>HDFCBANK — 69</li></ol>';
+  document.getElementById('indicesBox').textContent = 'NIFTY: 24,500 • BANKNIFTY: 52,450 • SENSEX: 80,780';
+  document.getElementById('newsBox').innerHTML = '<div>Banking stocks rally (demo)</div><div>Crude steady (demo)</div>';
+}
+fillDemo();
+
+/* ---------------- WhatsApp share ------------------ */
+document.getElementById('shareBtn').addEventListener('click', ()=> {
+  const text = 📈 Halal Smart Stock idea\nGPT Top: INFY (78)\nTarling SL demo\nOpen: ${location.href};
+  const url = 'https://wa.me/?text=' + encodeURIComponent(text);
+  window.open(url,'_blank');
+});
+
+/* --------------- PWA install flow ----------------- */
+let deferredPrompt = null;
+const installBtn = document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt', (e)=> {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.classList.remove('hide');
+});
+installBtn.addEventListener('click', async ()=>{
+  if(!deferredPrompt){ alert('Open in Chrome and try Add to Home Screen there.'); return; }
+  deferredPrompt.prompt();
+  const choice = await deferredPrompt.userChoice;
+  if(choice.outcome === 'accepted') console.log('PWA installed');
+  deferredPrompt = null;
+});
+
+/* --------------- Firebase Google Login ------------- */
+function safeMsg(msg){ const slot=document.getElementById('auth-slot'); if(slot) slot.innerHTML = '<div class="small pill">'+msg+'</div>'; }
 (function initAuth(){
-  const slot=document.getElementById('auth-slot');
-  if(!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey.startsWith('REPLACE')){
-    slot.innerHTML='<small style="color:#a00">Firebase not configured — login disabled</small>'; return;
+  const slot = document.getElementById('auth-slot');
+  if(!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey.indexOf('REPLACE_')===0){
+    safeMsg('Firebase not configured — login disabled');
+    window.__HALAL_USER = null;
+    return;
   }
   try{
     firebase.initializeApp(FIREBASE_CONFIG);
-    const auth=firebase.auth();
+    const auth = firebase.auth();
 
     function render(user){
-      slot.innerHTML='';
+      slot.innerHTML = '';
       if(!user){
-        const btn=document.createElement('button'); btn.className='btn primary'; btn.textContent='Login with Google';
-        btn.onclick=async ()=>{
-          const provider=new firebase.auth.GoogleAuthProvider();
-          try{ await auth.signInWithPopup(provider); }
-          catch(e){ try{ await auth.signInWithRedirect(provider); }catch(err){ alert('Login error: '+(err.message||err)); } }
+        const btn = document.createElement('button'); btn.className='btn'; btn.textContent='Login with Google';
+        btn.onclick = async ()=>{
+          const provider = new firebase.auth.GoogleAuthProvider();
+          // desktop: popup; mobile: redirect fallback
+          try{ await auth.signInWithPopup(provider); } catch(e){ try{ await auth.signInWithRedirect(provider); } catch(err){ alert('Login error: '+(err.message||err)); } }
         };
         slot.appendChild(btn);
       } else {
-        const wrap=document.createElement('div'); wrap.className='userpill';
-        const img=document.createElement('img'); img.src=user.photoURL||''; img.width=28; img.height=28; img.style.borderRadius='18px'; img.style.objectFit='cover';
-        const name=document.createElement('span'); name.textContent=(user.displayName||'User').split(' ')[0];
-        const out=document.createElement('button'); out.className='btn'; out.textContent='Logout'; out.onclick=()=>auth.signOut();
+        const wrap = document.createElement('div'); wrap.className='userpill';
+        const img = document.createElement('img'); img.src = user.photoURL || ''; img.width=34; img.height=34; img.style.borderRadius='6px';
+        const name = document.createElement('div'); name.textContent = user.displayName || user.email; name.style.marginLeft='8px';
+        const out = document.createElement('button'); out.className='btn ghost'; out.textContent='Logout'; out.onclick = ()=> auth.signOut();
         wrap.appendChild(img); wrap.appendChild(name); wrap.appendChild(out); slot.appendChild(wrap);
       }
+      window.__HALAL_USER = user || null;
     }
-    auth.onAuthStateChanged(user=>render(user));
-  }catch(e){ console.error(e); slot.innerHTML='<small style="color:#a00">Firebase init failed</small>'; }
+
+    auth.onAuthStateChanged(user => render(user));
+  } catch(e){
+    console.error('Firebase init error', e);
+    safeMsg('Firebase init error');
+  }
 })();
+</script>
+
+<!-- register service worker -->
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=> {
+    navigator.serviceWorker.register('service-worker.js').then(()=>console.log('SW registered')).catch(()=>console.warn('SW failed'));
+  });
+}
 </script>
 </body>
 </html>
