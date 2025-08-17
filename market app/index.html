@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Halal Smart Stock - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>📊 Halal Smart Stock App</h1>
+    <button onclick="logout()">Logout</button>
+  </header>
+
+  <main>
+    <!-- GPT Power -->
+    <section>
+      <h2>⚡ GPT Power Picks</h2>
+      <div id="gptPower"></div>
+    </section>
+
+    <!-- Trailing Stop Loss -->
+    <section>
+      <h2>🛡 Trailing Stop Loss</h2>
+      <div id="stopLoss"></div>
+    </section>
+
+    <!-- 18 Horse Breaking News -->
+    <section>
+      <h2>🐎 18 Horse Breaking News</h2>
+      <div id="news"></div>
+    </section>
+
+    <!-- Market Index -->
+    <section>
+      <h2>📈 All Index Data</h2>
+      <div id="indices"></div>
+    </section>
+
+    <!-- Halal Stocks -->
+    <section>
+      <h2>✅ Halal Stock List</h2>
+      <div id="halalStocks"></div>
+    </section>
+
+    <!-- World Markets -->
+    <section>
+      <h2>🌍 Global & Commodity Data</h2>
+      <ul>
+        <li>US Market: <span id="usMarket"></span></li>
+        <li>Crude Oil: <span id="crudeOil"></span></li>
+        <li>World Market: <span id="worldMarket"></span></li>
+        <li>Gift Nifty: <span id="giftNifty"></span></li>
+        <li>Dollar Rate: <span id="dollar"></span></li>
+      </ul>
+    </section>
+
+    <!-- Share Button -->
+    <section>
+      <h2>📲 Share App</h2>
+      <button onclick="shareApp()">Share on WhatsApp</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
