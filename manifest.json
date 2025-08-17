@@ -1,21 +1,12 @@
 {
   "name": "Halal Smart Stock",
   "short_name": "HalalStock",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#004d26",
-  "theme_color": "#008000",
-  "description": "Live Halal stock tracker with GPT Power and alerts",
+  "background_color": "#0b2f22",
+  "theme_color": "#0ea35a",
   "icons": [
-    {
-      "src": "/static/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/static/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
