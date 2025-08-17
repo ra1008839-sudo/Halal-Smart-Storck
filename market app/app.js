@@ -1,45 +1,64 @@
-// Dummy data for demo (API integrate karna padega later)
+// app.js - Dashboard logic (copy-paste safe demo)
+document.getElementById('year').textContent = new Date().getFullYear();
 
-// GPT Power
-document.getElementById("gptPower").innerHTML = `
-  1. Reliance - Buy<br>
-  2. TCS - Buy<br>
-  3. Infosys - Wait
-`;
+// hide splash after 3s
+setTimeout(()=>{ const s=document.getElementById('splash'); if(s) s.style.display='none'; }, 3000);
 
-// Stop Loss
-document.getElementById("stopLoss").innerText = "Active on Reliance @ ₹2400 (Trail Mode)";
+// Auth UI: read local user saved by login
+(function authUI(){
+  // try localStorage first
+  const stored = localStorage.getItem('hss_user');
+  const slot = document.getElementById('auth-slot');
+  if (stored) {
+    const u = JSON.parse(stored);
+    slot.innerHTML = `<div style="display:flex;align-items:center;gap:8px">
+      <img src="${u.photo||''}" style="width:34px;height:34px;border-radius:6px"/>
+      <div>${u.name||u.email}</div>
+      <button class="btn ghost" onclick="signOutUI()">Logout</button>
+    </div>`;
+  } else {
+    slot.innerHTML = <button class="btn" onclick="window.location='login.html'">Login</button>;
+  }
 
-// News
-document.getElementById("news").innerText = "Breaking: Market opening strong due to US cues.";
+  // If firebase auth present, also watch state
+  if (window.firebase && firebase.auth) {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        const info = { uid:user.uid, name:user.displayName, email:user.email, photo:user.photoURL };
+        localStorage.setItem('hss_user', JSON.stringify(info));
+        slot.innerHTML = `<div style="display:flex;align-items:center;gap:8px">
+          <img src="${info.photo||''}" style="width:34px;height:34px;border-radius:6px"/>
+          <div>${info.name||info.email}</div>
+          <button class="btn ghost" onclick="signOutUI()">Logout</button>
+        </div>`;
+      }
+    });
+  }
+})();
 
-// Index Data
-document.getElementById("indices").innerHTML = `
-  Nifty 50: 24,300 ▲<br>
-  Sensex: 81,000 ▲<br>
-  Bank Nifty: 52,100 ▼
-`;
-
-// Halal Stocks
-document.getElementById("halalStocks").innerHTML = `
-  TCS, Infosys, Wipro, HCL Tech, Tech Mahindra
-`;
-
-// World Market
-document.getElementById("usMarket").innerText = "Dow Jones +150 pts";
-document.getElementById("crudeOil").innerText = "$82/barrel";
-document.getElementById("worldMarket").innerText = "Global markets stable";
-document.getElementById("giftNifty").innerText = "24,400 (+100)";
-document.getElementById("dollar").innerText = "₹83.20";
-
-// Share button
-function shareApp() {
-  let url = "https://yourapp.com";
-  let text = "Check out Halal Smart Stock App 📊: " + url;
-  window.open(https://wa.me/?text=${encodeURIComponent(text)}, "_blank");
+// Demo data load (replace with real API fetch later)
+function loadDemoData(){
+  document.getElementById('gptPower').innerHTML = '<ol><li>INFY — 78</li><li>TCS — 73</li><li>HDFCBANK — 69</li></ol>';
+  document.getElementById('tslBox').textContent = 'Demo trailing SL: INFY ₹1450';
+  document.getElementById('halalList').innerHTML = '<li>TCS</li><li>INFY</li><li>HDFCBANK</li><li>ITC</li>';
+  document.getElementById('indices').textContent = 'NIFTY: 24,500 • BANKNIFTY: 52,450 • SENSEX: 80,780';
+  document.getElementById('news').innerHTML = '<div>Demo: Market opens positive.</div>';
+  document.getElementById('usMarket').textContent = 'Dow +120';
+  document.getElementById('crude').textContent = '$83.50';
+  document.getElementById('gift').textContent = '24,420';
+  document.getElementById('dxy').textContent = '₹83.10';
 }
+loadDemoData();
 
-// Logout
-function logout() {
-  window.location.href = "login.html";
-}
+document.getElementById('refreshBtn').addEventListener('click', ()=> {
+  // placeholder: re-run demo load (later replace with API calls)
+  loadDemoData();
+  alert('Demo refreshed — replace with live API calls later');
+});
+
+// WhatsApp share
+document.getElementById('shareBtn').addEventListener('click', ()=> {
+  const text = Halal Smart Stock - try this demo app: ${location.href};
+  const url = 'https://wa.me/?text=' + encodeURIComponent(text);
+  window.open(url, '_blank');
+});
