@@ -1,66 +1,109 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Halal Smart Stock - Dashboard</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <header>
-    <h1>📊 Halal Smart Stock App</h1>
-    <button onclick="logout()">Logout</button>
+  <!-- Splash (3s auto hide) -->
+  <div id="splash" class="splash">
+    <div class="splash-card"><h1>Bismillah</h1></div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">Halal Smart Stock</div>
+    <div id="auth-slot"></div>
   </header>
 
-  <main>
-    <!-- GPT Power -->
-    <section>
-      <h2>⚡ GPT Power Picks</h2>
-      <div id="gptPower"></div>
+  <main class="container">
+    <section class="card actions">
+      <button id="shareBtn" class="btn">Share App (WhatsApp)</button>
+      <button id="refreshBtn" class="btn ghost">Refresh Data</button>
+      <button id="installBtn" class="btn ghost hide">Install App</button>
     </section>
 
-    <!-- Trailing Stop Loss -->
-    <section>
-      <h2>🛡 Trailing Stop Loss</h2>
-      <div id="stopLoss"></div>
+    <section class="grid">
+      <div class="card">
+        <h3>GPT Power</h3>
+        <div id="gptPower" class="small">Loading demo...</div>
+      </div>
+
+      <div class="card">
+        <h3>Trailing Stop Loss</h3>
+        <div id="tslBox" class="small">Demo SL values</div>
+      </div>
+
+      <div class="card">
+        <h3>Halal Stock List</h3>
+        <ul id="halalList" class="small">
+          <li>TCS</li><li>INFY</li><li>HDFCBANK</li><li>ITC</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Markets / Indices</h3>
+        <div id="indices" class="small">Loading indices...</div>
+      </div>
+
+      <div class="card">
+        <h3>18-Hour News</h3>
+        <div id="news" class="small">Press refresh to load demo news.</div>
+      </div>
+
+      <div class="card">
+        <h3>Global & Commodities</h3>
+        <div class="small">
+          US Market: <span id="usMarket">—</span><br>
+          Crude Oil: <span id="crude">—</span><br>
+          GIFT Nifty: <span id="gift">—</span><br>
+          Dollar (INR): <span id="dxy">—</span>
+        </div>
+      </div>
     </section>
 
-    <!-- 18 Horse Breaking News -->
-    <section>
-      <h2>🐎 18 Horse Breaking News</h2>
-      <div id="news"></div>
-    </section>
-
-    <!-- Market Index -->
-    <section>
-      <h2>📈 All Index Data</h2>
-      <div id="indices"></div>
-    </section>
-
-    <!-- Halal Stocks -->
-    <section>
-      <h2>✅ Halal Stock List</h2>
-      <div id="halalStocks"></div>
-    </section>
-
-    <!-- World Markets -->
-    <section>
-      <h2>🌍 Global & Commodity Data</h2>
-      <ul>
-        <li>US Market: <span id="usMarket"></span></li>
-        <li>Crude Oil: <span id="crudeOil"></span></li>
-        <li>World Market: <span id="worldMarket"></span></li>
-        <li>Gift Nifty: <span id="giftNifty"></span></li>
-        <li>Dollar Rate: <span id="dollar"></span></li>
-      </ul>
-    </section>
-
-    <!-- Share Button -->
-    <section>
-      <h2>📲 Share App</h2>
-      <button onclick="shareApp()">Share on WhatsApp</button>
-    </section>
+    <footer class="footer">© <span id="year"></span> Halal Smart Stock</footer>
   </main>
 
-  <script src="app.js"></script>
+  <script src="firebase.js"></script>
+  <script src="app.js" defer></script>
+
+  <script>
+    // PWA install handler
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.classList.remove('hide');
+    });
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return alert('Open in Chrome on mobile to install.');
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      installBtn.classList.add('hide');
+    });
+
+    // Logout helper (app.js also uses)
+    function signOutUI() {
+      if (firebase && firebase.auth) firebase.auth().signOut();
+      localStorage.removeItem('hss_user');
+      window.location.href = 'login.html';
+    }
+    // expose globally for app.js
+    window.signOutUI = signOutUI;
+  </script>
+
+  <!-- register service worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', ()=> {
+        navigator.serviceWorker.register('service-worker.js').then(()=>console.log('SW registered'));
+      });
+    }
+  </script>
 </body>
 </html>
