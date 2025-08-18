@@ -1,52 +1,28 @@
-from flask import Flask, render_template, request, jsonify
-from datetime import datetime
-import os
+from flask import Flask, render_template, jsonify
+from flask_cors import CORS
 
-app = Flask(__name__, template_folder="templates", static_folder="static")
+app = Flask(_name_)
+CORS(app)  # जरूरत हो तो WebViewer/वेब से कॉल की अनुमति
 
-
+# ---------- Pages ----------
 @app.route("/")
 def home():
-    return render_template("index.html")
+    # templates/index.html रेंडर करेगा
+    return render_template("index.html", app_name="Halal Smart Stock")
 
-
-@app.route("/health")
+@app.route("/healthz")
 def health():
     return "ok", 200
 
+# ---------- Demo APIs (placeholder) ----------
+@app.route("/api/ping")
+def ping():
+    return jsonify({"status": "ok", "message": "Halal Smart Stock backend is live"})
 
-def gpt_power_signal(volume: int):
-    if volume > 900000:
-        return "BUY", "green"
-    elif volume > 500000:
-        return "WAIT", "orange"
-    else:
-        return "AVOID", "red"
+@app.route("/api/version")
+def version():
+    return jsonify({"version": "v0.1.0", "mode": "demo"})
 
-
-@app.route("/get-signal", methods=["POST"])
-def get_signal():
-    data = request.get_json(silent=True) or {}
-    volume = int(data.get("volume", 0))
-    stock = str(data.get("stock", "Unknown"))
-    signal, color = gpt_power_signal(volume)
-    return jsonify(
-        {
-            "stock": stock,
-            "volume": volume,
-            "signal": signal,
-            "color": color,
-            "timestamp": datetime.utcnow().isoformat() + "Z",
-        }
-    )
-
-
-@app.errorhandler(404)
-def fallback(_):
-    # Agar koi aur path aayega to index.html hi de do (SPA style)
-    return render_template("index.html"), 200
-
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+# लोकल पर ही डेव-सर्वर चले; Render पर Gunicorn चलेगा
+if _name_ == "_main_":
+    app.run(host="0.0.0.0", port=5000, debug=True)
