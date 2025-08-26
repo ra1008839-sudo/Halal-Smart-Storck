@@ -1,47 +1,31 @@
 from flask import Flask, render_template, send_from_directory
-from pathlib import Path
 
-# ==== Paths ====
-BASE_DIR = Path(_file_).resolve().parent
-TEMPLATES_DIR = BASE_DIR / "templates"
-STATIC_DIRS = {
-    "assets": BASE_DIR / "assets",
-    "icon": BASE_DIR / "icon",
-    "market app": BASE_DIR / "market app",
-}
+app = Flask(_name_, static_folder="assets", template_folder="templates")
 
-# ==== Flask app ====
-app = Flask(
-    _name_,
-    template_folder=str(TEMPLATES_DIR),
-    static_folder=None  # static ko hum manual routes se serve kar rahe hain
-)
-
-# ---- Home page ----
+# ✅ Home Page
 @app.route("/")
 def home():
-    # templates/index.html render hoga
     return render_template("index.html")
 
-# ---- Health check (Render settings me use karo) ----
-@app.route("/healthz")
-def healthz():
-    return "ok", 200
-
-# ---- Static folders serve karne ke simple routes ----
+# ✅ Static files auto serve honge (assets, css, js, images)
 @app.route("/assets/<path:filename>")
-def serve_assets(filename):
-    return send_from_directory(STATIC_DIRS["assets"], filename)
+def custom_static(filename):
+    return send_from_directory("assets", filename)
 
+# ✅ Icons serve
 @app.route("/icon/<path:filename>")
-def serve_icon(filename):
-    return send_from_directory(STATIC_DIRS["icon"], filename)
+def icons(filename):
+    return send_from_directory("icon", filename)
 
-@app.route("/market%20app/<path:filename>")
-@app.route("/market app/<path:filename>")
-def serve_market_app(filename):
-    return send_from_directory(STATIC_DIRS["market app"], filename)
+# ✅ Market App static serve
+@app.route("/marketapp/<path:filename>")
+def marketapp(filename):
+    return send_from_directory("market app", filename)
 
-# local run ke liye (Render par gunicorn chalega)
+# ✅ Health check (Render ke liye zaruri hai)
+@app.route("/health")
+def health():
+    return "OK", 200
+
 if _name_ == "_main_":
     app.run(host="0.0.0.0", port=5000)
