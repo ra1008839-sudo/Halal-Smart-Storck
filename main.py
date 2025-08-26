@@ -1,92 +1,92 @@
-from flask import Flask, jsonify, send_from_directory, render_template, render_template_string
-import os
+from flask import Flask, render_template, render_template_string, send_from_directory, jsonify
+from flask_cors import CORS
 from pathlib import Path
+import os
 
-# Folders (optional): templates/ for index.html, assets/ for images/css/js, icon/ for favicon
+# -------- Paths --------
 BASE_DIR = Path(_file_).resolve().parent
 TEMPLATES_DIR = BASE_DIR / "templates"
 ASSETS_DIR = BASE_DIR / "assets"
 ICON_DIR = BASE_DIR / "icon"
 
-app = Flask(_name_, static_folder=str(ASSETS_DIR), template_folder=str(TEMPLATES_DIR))
+# -------- App --------
+app = Flask(
+    _name_,
+    static_folder=str(ASSETS_DIR),       # /assets ke liye
+    template_folder=str(TEMPLATES_DIR)   # /templates ke liye
+)
+CORS(app)
 
-
+# -------- Routes --------
 @app.route("/")
 def home():
     """
-    If templates/index.html exists -> render it.
-    Otherwise show a minimal built-in page so the app always works.
+    templates/index.html ho to wahi render hoga,
+    warna lightweight fallback page dikhega (taaki kabhi blank na aaye).
     """
     index_file = TEMPLATES_DIR / "index.html"
     if index_file.exists():
-        return render_template("index.html", app_name="Halal Smart Stock")
-    # Fallback inline page (no templates needed)
-    return render_template_string(
-        """
-        <!doctype html>
-        <html lang="en">
-        <head>
-          <meta charset="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <title>Halal Smart Stock</title>
-          <style>
-            body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;margin:0;padding:40px;line-height:1.5}
-            .wrap{max-width:880px;margin:0 auto}
-            .badge{display:inline-block;background:#10b981;color:#fff;border-radius:9999px;padding:6px 10px;font-size:12px}
-            .card{border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-top:18px}
-            code{background:#f3f4f6;padding:2px 6px;border-radius:6px}
-          </style>
-        </head>
-        <body>
-          <div class="wrap">
-            <span class="badge">Backend Live</span>
-            <h1>Halal Smart Stock – Backend</h1>
-            <p>This service is running on Flask + Gunicorn.</p>
+        return render_template("index.html")
+    # Fallback HTML
+    return render_template_string("""
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width,initial-scale=1" />
+      <title>Halal Smart Stock</title>
+      <style>
+        body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+             margin:0;display:grid;place-items:center;height:100vh;background:#0b2d39;color:#fff}
+        .card{background:#102f3a;border:1px solid #214; padding:28px 32px; border-radius:14px; box-shadow:0 6px 30px rgba(0,0,0,.3)}
+        h1{margin:0 0 8px;font-size:24px}
+        p{margin:0 0 12px;opacity:.9}
+        a{color:#50e3c2;text-decoration:none}
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <h1>Halal Smart Stock</h1>
+        <p>Template missing; fallback page loaded.</p>
+        <p><a href="/healthz">/healthz</a> • <a href="/api/ping">/api/ping</a></p>
+      </div>
+      <script>
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js').catch(()=>{});
+          });
+        }
+      </script>
+    </body>
+    </html>
+    """), 200
 
-            <div class="card">
-              <h3>Health</h3>
-              <p>Check health at <code>/healthz</code></p>
-              <p>Version API: <code>/api/version</code></p>
-            </div>
-
-            <div class="card">
-              <h3>Static files</h3>
-              <p>Place files in <code>assets/</code> and access them at <code>/assets/&lt;file&gt;</code>.</p>
-            </div>
-          </div>
-        </body>
-        </html>
-        """
-    )
-
+@app.route("/service-worker.js")
+def service_worker():
+    """
+    Agar aapki project root me service-worker.js hai,
+    to Render/Gunicorn par bhi ye route se serve ho jayega.
+    """
+    return send_from_directory(str(BASE_DIR), "service-worker.js", mimetype="application/javascript")
 
 @app.route("/healthz")
-def health():
-    """Used by Render health checks."""
-    return "ok", 200
+def healthz():
+    return jsonify({"status": "ok", "message": "halal smart stock backend is live"}), 200
 
+@app.route("/api/ping")
+def ping():
+    return jsonify({"pong": True, "version": "v1.0.0", "mode": "prod"}), 200
 
-@app.route("/api/version")
-def version():
-    return jsonify({"name": "halal-smart-stock-backend", "version": "1.0.0", "mode": "live"})
-
-
-@app.route("/favicon.ico")
-def favicon():
-    # Serve icon/favicon.ico if present, else 204
-    fav = ICON_DIR / "favicon.ico"
-    if fav.exists():
-        return send_from_directory(str(ICON_DIR), "favicon.ico")
-    return ("", 204)
-
+# Optional: static icons agar directly chahiye
+@app.route("/icon/<path:filename>")
+def icons(filename):
+    return send_from_directory(str(ICON_DIR), filename)
 
 @app.route("/assets/<path:filename>")
-def assets(filename: str):
-    """Serve static assets (images, css, js) from assets/ directory."""
+def assets(filename):
     return send_from_directory(str(ASSETS_DIR), filename)
 
-
 if _name_ == "_main_":
-    # Local run (Render will use gunicorn from Procfile)
-    port = int(os.getenv("PORT", "8000"))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    # Local run ke liye
+    port = int(os.environ.get("PORT", "8000"))
+    app.run(host="0.0.0.0", port=port, debug=False)
