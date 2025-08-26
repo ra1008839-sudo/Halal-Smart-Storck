@@ -1,31 +1,28 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, jsonify, send_from_directory
+from pathlib import Path
 
-app = Flask(_name_, static_folder="assets", template_folder="templates")
+BASE_DIR = Path(_file_).resolve().parent
+TEMPLATES_DIR = BASE_DIR / "templates"
+ASSETS_DIR = BASE_DIR / "assets"
+ICON_DIR = BASE_DIR / "icon"
 
-# ✅ Home Page
+app = Flask(_name_, static_folder=str(ASSETS_DIR), template_folder=str(TEMPLATES_DIR))
+
 @app.route("/")
 def home():
-    return render_template("index.html")
+    index_file = TEMPLATES_DIR / "index.html"
+    if index_file.exists():
+        return render_template("index.html")
+    return "<h2>Halal Smart Stock backend is live ✅</h2>"
 
-# ✅ Static files auto serve honge (assets, css, js, images)
-@app.route("/assets/<path:filename>")
-def custom_static(filename):
-    return send_from_directory("assets", filename)
+@app.route("/healthz")
+def healthz():
+    return jsonify({"ok": True}), 200
 
-# ✅ Icons serve
+# (optional) icons/static direct serve
 @app.route("/icon/<path:filename>")
 def icons(filename):
-    return send_from_directory("icon", filename)
-
-# ✅ Market App static serve
-@app.route("/marketapp/<path:filename>")
-def marketapp(filename):
-    return send_from_directory("market app", filename)
-
-# ✅ Health check (Render ke liye zaruri hai)
-@app.route("/health")
-def health():
-    return "OK", 200
+    return send_from_directory(ICON_DIR, filename)
 
 if _name_ == "_main_":
     app.run(host="0.0.0.0", port=5000)
