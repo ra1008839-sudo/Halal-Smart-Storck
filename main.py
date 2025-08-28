@@ -1,5 +1,6 @@
-from flask import Flask, render_template, jsonify, send_from_directory
+from flask import Flask, render_template, send_from_directory, jsonify
 from pathlib import Path
+import os
 
 BASE_DIR = Path(_file_).resolve().parent
 TEMPLATES_DIR = BASE_DIR / "templates"
@@ -13,16 +14,20 @@ def home():
     index_file = TEMPLATES_DIR / "index.html"
     if index_file.exists():
         return render_template("index.html")
-    return "<h2>Halal Smart Stock backend is live ✅</h2>"
+    return "<h1>Halal Smart Stock</h1><p>templates/index.html missing.</p>"
 
-@app.route("/healthz")
-def healthz():
-    return jsonify({"ok": True}), 200
+@app.route("/assets/<path:filename>")
+def assets(filename):
+    return send_from_directory(ASSETS_DIR, filename)
 
-# (optional) icons/static direct serve
 @app.route("/icon/<path:filename>")
 def icons(filename):
     return send_from_directory(ICON_DIR, filename)
 
+@app.route("/healthz")
+def healthz():
+    return jsonify(status="ok")
+
 if _name_ == "_main_":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
