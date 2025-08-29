@@ -1,33 +1,18 @@
-from flask import Flask, render_template, send_from_directory, jsonify
-from pathlib import Path
-import os
+from flask import Flask, render_template
 
-BASE_DIR = Path(_file_).resolve().parent
-TEMPLATES_DIR = BASE_DIR / "templates"
-ASSETS_DIR = BASE_DIR / "assets"
-ICON_DIR = BASE_DIR / "icon"
+app = Flask(_name_)
 
-app = Flask(_name_, static_folder=str(ASSETS_DIR), template_folder=str(TEMPLATES_DIR))
-
+# Home route
 @app.route("/")
 def home():
-    index_file = TEMPLATES_DIR / "index.html"
-    if index_file.exists():
-        return render_template("index.html")
-    return "<h1>Halal Smart Stock</h1><p>templates/index.html missing.</p>"
+    return "<h2>✅ Halal Smart Stock App is Running Successfully!</h2>"
 
-@app.route("/assets/<path:filename>")
-def assets(filename):
-    return send_from_directory(ASSETS_DIR, filename)
-
-@app.route("/icon/<path:filename>")
-def icons(filename):
-    return send_from_directory(ICON_DIR, filename)
-
-@app.route("/healthz")
-def healthz():
-    return jsonify(status="ok")
+# Example API route (you can expand later)
+@app.route("/signal")
+def signal():
+    # Dummy response, you can add GPT logic later
+    return {"status": "OK", "signal": "BUY", "volume": 1200}
 
 if _name_ == "_main_":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    # Debug mode for local run
+    app.run(host="0.0.0.0", port=5000, debug=True)
