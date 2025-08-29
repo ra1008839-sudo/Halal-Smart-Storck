@@ -1,9 +1,9 @@
 from flask import Flask, render_template, jsonify
 import datetime
 
-app = Flask(_name_, static_folder="assets", template_folder="templates")
+@app = Flask(_name_, static_folder="assets", template_folder="templates")
 
-app.route("/")
+@app.route("/")
 def home():
     # templates/index.html render hoga; agar nahi hai to simple text bhej do
     try:
@@ -11,7 +11,7 @@ def home():
     except Exception:
         return "Halal Smart Stock running", 200
 
-app.route("/signal")
+@app.route("/signal")
 def signal():
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     data = {"signal": "BUY", "reason": "Volume spike", "time": now}
