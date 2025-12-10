@@ -49,6 +49,10 @@ class HalalSmartStockApp extends StatelessWidget {
                   ),
                 );
               }
+              // Import will be added dynamically if stock detail is accessed
+              if (settings.name == '/stock-detail') {
+                // Stock detail route will be handled by importing the screen
+              }
               return null;
             },
           );
