@@ -1,0 +1,347 @@
+import '../models/stock_model.dart';
+
+class HalalStocksData {
+  static List<StockModel> getSampleStocks() {
+    return [
+      // Technology
+      StockModel(
+        symbol: 'TCS',
+        name: 'Tata Consultancy Services',
+        exchange: 'NSE',
+        currentPrice: 3650.50,
+        previousClose: 3625.00,
+        open: 3630.00,
+        high: 3680.00,
+        low: 3620.00,
+        volume: 2500000,
+        marketCap: 13250000000000,
+        sector: 'Technology',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'INFY',
+        name: 'Infosys Limited',
+        exchange: 'NSE',
+        currentPrice: 1450.75,
+        previousClose: 1440.00,
+        open: 1445.00,
+        high: 1460.00,
+        low: 1438.00,
+        volume: 3200000,
+        marketCap: 6000000000000,
+        sector: 'Technology',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'WIPRO',
+        name: 'Wipro Limited',
+        exchange: 'NSE',
+        currentPrice: 405.25,
+        previousClose: 408.00,
+        open: 407.00,
+        high: 410.00,
+        low: 402.00,
+        volume: 1800000,
+        marketCap: 2200000000000,
+        sector: 'Technology',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'HCLTECH',
+        name: 'HCL Technologies',
+        exchange: 'NSE',
+        currentPrice: 1235.80,
+        previousClose: 1220.00,
+        open: 1225.00,
+        high: 1245.00,
+        low: 1218.00,
+        volume: 2100000,
+        marketCap: 3350000000000,
+        sector: 'Technology',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'TECHM',
+        name: 'Tech Mahindra',
+        exchange: 'NSE',
+        currentPrice: 1155.50,
+        previousClose: 1165.00,
+        open: 1162.00,
+        high: 1170.00,
+        low: 1150.00,
+        volume: 1500000,
+        marketCap: 1120000000000,
+        sector: 'Technology',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      
+      // Healthcare
+      StockModel(
+        symbol: 'SUNPHARMA',
+        name: 'Sun Pharmaceutical',
+        exchange: 'NSE',
+        currentPrice: 1165.25,
+        previousClose: 1155.00,
+        open: 1158.00,
+        high: 1175.00,
+        low: 1152.00,
+        volume: 1200000,
+        marketCap: 2800000000000,
+        sector: 'Healthcare',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'DRREDDY',
+        name: 'Dr Reddys Laboratories',
+        exchange: 'NSE',
+        currentPrice: 5450.75,
+        previousClose: 5420.00,
+        open: 5430.00,
+        high: 5480.00,
+        low: 5415.00,
+        volume: 450000,
+        marketCap: 905000000000,
+        sector: 'Healthcare',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'CIPLA',
+        name: 'Cipla Limited',
+        exchange: 'NSE',
+        currentPrice: 1385.50,
+        previousClose: 1395.00,
+        open: 1390.00,
+        high: 1400.00,
+        low: 1378.00,
+        volume: 980000,
+        marketCap: 1120000000000,
+        sector: 'Healthcare',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      
+      // Consumer Goods
+      StockModel(
+        symbol: 'HINDUNILVR',
+        name: 'Hindustan Unilever',
+        exchange: 'NSE',
+        currentPrice: 2485.25,
+        previousClose: 2470.00,
+        open: 2475.00,
+        high: 2495.00,
+        low: 2468.00,
+        volume: 1100000,
+        marketCap: 5850000000000,
+        sector: 'Consumer Goods',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'ITC',
+        name: 'ITC Limited',
+        exchange: 'NSE',
+        currentPrice: 415.80,
+        previousClose: 418.00,
+        open: 417.00,
+        high: 420.00,
+        low: 413.00,
+        volume: 8500000,
+        marketCap: 5200000000000,
+        sector: 'Consumer Goods',
+        isHalal: false, // Has tobacco business
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'NESTLEIND',
+        name: 'Nestle India',
+        exchange: 'NSE',
+        currentPrice: 2285.50,
+        previousClose: 2270.00,
+        open: 2275.00,
+        high: 2295.00,
+        low: 2268.00,
+        volume: 420000,
+        marketCap: 2200000000000,
+        sector: 'Consumer Goods',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      
+      // Industrial
+      StockModel(
+        symbol: 'LT',
+        name: 'Larsen & Toubro',
+        exchange: 'NSE',
+        currentPrice: 3485.75,
+        previousClose: 3460.00,
+        open: 3470.00,
+        high: 3500.00,
+        low: 3455.00,
+        volume: 1350000,
+        marketCap: 4850000000000,
+        sector: 'Industrial',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'SIEMENS',
+        name: 'Siemens Limited',
+        exchange: 'NSE',
+        currentPrice: 4125.50,
+        previousClose: 4095.00,
+        open: 4105.00,
+        high: 4145.00,
+        low: 4090.00,
+        volume: 285000,
+        marketCap: 1460000000000,
+        sector: 'Industrial',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      
+      // Utilities
+      StockModel(
+        symbol: 'POWERGRID',
+        name: 'Power Grid Corporation',
+        exchange: 'NSE',
+        currentPrice: 285.25,
+        previousClose: 283.00,
+        open: 284.00,
+        high: 287.00,
+        low: 282.00,
+        volume: 5200000,
+        marketCap: 2650000000000,
+        sector: 'Utilities',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'NTPC',
+        name: 'NTPC Limited',
+        exchange: 'NSE',
+        currentPrice: 265.80,
+        previousClose: 268.00,
+        open: 267.00,
+        high: 270.00,
+        low: 264.00,
+        volume: 6800000,
+        marketCap: 2580000000000,
+        sector: 'Utilities',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      
+      // Telecom
+      StockModel(
+        symbol: 'BHARTIARTL',
+        name: 'Bharti Airtel',
+        exchange: 'NSE',
+        currentPrice: 1285.50,
+        previousClose: 1275.00,
+        open: 1280.00,
+        high: 1295.00,
+        low: 1272.00,
+        volume: 3500000,
+        marketCap: 7250000000000,
+        sector: 'Telecom',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      
+      // Energy
+      StockModel(
+        symbol: 'ONGC',
+        name: 'Oil & Natural Gas Corporation',
+        exchange: 'NSE',
+        currentPrice: 185.75,
+        previousClose: 188.00,
+        open: 187.00,
+        high: 190.00,
+        low: 184.00,
+        volume: 12500000,
+        marketCap: 2340000000000,
+        sector: 'Energy',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'RELIANCE',
+        name: 'Reliance Industries',
+        exchange: 'NSE',
+        currentPrice: 2485.50,
+        previousClose: 2465.00,
+        open: 2470.00,
+        high: 2495.00,
+        low: 2460.00,
+        volume: 8500000,
+        marketCap: 16850000000000,
+        sector: 'Energy',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      
+      // Materials
+      StockModel(
+        symbol: 'ULTRACEMCO',
+        name: 'UltraTech Cement',
+        exchange: 'NSE',
+        currentPrice: 8650.25,
+        previousClose: 8600.00,
+        open: 8620.00,
+        high: 8680.00,
+        low: 8595.00,
+        volume: 185000,
+        marketCap: 2500000000000,
+        sector: 'Materials',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+      StockModel(
+        symbol: 'HINDALCO',
+        name: 'Hindalco Industries',
+        exchange: 'NSE',
+        currentPrice: 485.75,
+        previousClose: 490.00,
+        open: 488.00,
+        high: 495.00,
+        low: 483.00,
+        volume: 3200000,
+        marketCap: 1080000000000,
+        sector: 'Materials',
+        isHalal: true,
+        lastUpdated: DateTime.now(),
+      ),
+    ];
+  }
+
+  // Get only halal stocks
+  static List<StockModel> getHalalStocks() {
+    return getSampleStocks().where((stock) => stock.isHalal).toList();
+  }
+
+  // Get stocks by sector
+  static List<StockModel> getStocksBySector(String sector) {
+    return getSampleStocks().where((stock) => stock.sector == sector && stock.isHalal).toList();
+  }
+
+  // Get top gainers
+  static List<StockModel> getTopGainers({int limit = 10}) {
+    final stocks = getHalalStocks();
+    stocks.sort((a, b) => b.changePercentage.compareTo(a.changePercentage));
+    return stocks.take(limit).toList();
+  }
+
+  // Get top losers
+  static List<StockModel> getTopLosers({int limit = 10}) {
+    final stocks = getHalalStocks();
+    stocks.sort((a, b) => a.changePercentage.compareTo(b.changePercentage));
+    return stocks.take(limit).toList();
+  }
+}

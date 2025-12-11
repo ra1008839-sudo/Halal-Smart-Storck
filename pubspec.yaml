@@ -1,0 +1,43 @@
+name: halal_smart_stock
+description: Advanced Halal Stock Trading App with Algo Trading Bot
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # State Management
+  provider: ^6.1.1
+  
+  # UI
+  cupertino_icons: ^1.0.6
+  google_fonts: ^6.1.0
+  shimmer: ^3.0.0
+  fl_chart: ^0.66.0
+  
+  # Networking
+  dio: ^5.4.0
+  web_socket_channel: ^2.4.0
+  
+  # Storage
+  shared_preferences: ^2.2.2
+  
+  # Utils
+  intl: ^0.18.1
+  uuid: ^4.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/sounds/
